@@ -1,0 +1,24 @@
+# LF everywhere, in the repo and in the working tree, on every platform.
+#
+# Not just tidiness: branches/*.patch and quarter/round4-break.patch are applied
+# with `git apply` against files in platform-fixture/repos/, and a CRLF working
+# tree makes those patches fail to apply. The fixture scripts are bash. So this
+# overrides core.autocrlf rather than deferring to it.
+* text=auto eol=lf
+
+# Invoked by cmd.exe.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Explicit, because these are the ones that break loudly if they ever go CRLF.
+*.sh    text eol=lf
+*.patch text eol=lf
+mvnw    text eol=lf
+
+*.jar binary
+
+# Better hunk headers.
+*.java diff=java
+*.py   diff=python
+*.md   diff=markdown
+*.html diff=html
