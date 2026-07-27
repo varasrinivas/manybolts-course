@@ -1,0 +1,13 @@
+name: verify
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: [self-hosted, pool-a]
+    steps:
+      - uses: actions/checkout@v4
+      - name: test
+        run: npm test                        # 4 min
+      - name: reason parity
+        run: node scripts/reason-parity.mjs

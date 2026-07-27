@@ -1,0 +1,22 @@
+# Shared pipeline. One runner pool of six, used by every mob.
+# Canonical copy lives in the fixture at pipeline/bloated-suite/ci.yaml.
+name: verify
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: [self-hosted, pool-a]
+    steps:
+      - uses: actions/checkout@v4
+      - name: unit
+        run: ./mvnw -q test                  # 6 min
+      - name: integration
+        run: ./mvnw -q verify -Pit           # 21 min
+      - name: contract
+        run: ./mvnw -q verify -Pcontract     # 4 min  (never skip this one)
+      - name: package
+        run: ./mvnw -q package -DskipTests   # 3 min
+
+# Measured: 34 min end to end across the pool, 3,890 tests.
+# Pool utilisation last week: 83%. Mean queue wait: 41 min.

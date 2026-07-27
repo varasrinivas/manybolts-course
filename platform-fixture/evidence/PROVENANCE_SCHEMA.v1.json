@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Provenance record, v1",
+  "description": "Written by the pipeline when a unit of work lands.",
+  "type": "object",
+  "required": [
+    "unitOfWork",
+    "mob",
+    "engine",
+    "approver",
+    "landedAt"
+  ],
+  "properties": {
+    "unitOfWork": {
+      "type": "string"
+    },
+    "mob": {
+      "type": "string"
+    },
+    "engine": {
+      "type": "string",
+      "description": "Assistant used, if recorded"
+    },
+    "approver": {
+      "type": "string",
+      "description": "GitHub login that approved the pull request"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "unknown"
+      ]
+    },
+    "landedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "commit": {
+      "type": "string"
+    }
+  }
+}

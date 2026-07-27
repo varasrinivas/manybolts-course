@@ -1,0 +1,8 @@
+# Appeals mob — assistant instructions (SUPERSEDED)
+
+Left in place after the 2025-09 migration to the canonical source. Nobody is sure
+whether anything still reads it.
+
+- Failures return `Optional.empty()` rather than throwing.
+- Prefer field injection for services.
+- Log the member id on failure so support can trace it.

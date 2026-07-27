@@ -1,0 +1,26 @@
+{
+  "build": "trunk@1de88b0",
+  "generated": "2026-02-02T08:00:00Z",
+  "components": [
+    {
+      "name": "com.meridiancare:priorauth-clinical-rules",
+      "version": "2.7.0",
+      "scope": "compile"
+    },
+    {
+      "name": "com.meridiancare:priorauth-web-tokens",
+      "version": "1.4.0",
+      "scope": "compile"
+    },
+    {
+      "name": "org.junit.jupiter:junit-jupiter",
+      "version": "5.10.2",
+      "scope": "test"
+    },
+    {
+      "name": "org.apache.commons:commons-lang3",
+      "version": "3.14.0",
+      "scope": "compile"
+    }
+  ]
+}

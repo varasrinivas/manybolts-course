@@ -1,0 +1,9 @@
+# Ownership for priorauth-api.
+# Format: path  owning-mob
+
+/src/main/java/com/meridiancare/priorauth/appeals/   @meridiancare/mob-appeals
+/src/main/java/com/meridiancare/priorauth/gate/      @meridiancare/mob-gate
+/src/main/java/com/meridiancare/priorauth/domain/    @meridiancare/mob-appeals @meridiancare/mob-gate
+/src/main/java/com/meridiancare/priorauth/service/   @meridiancare/mob-appeals
+/src/main/java/com/meridiancare/priorauth/web/       @meridiancare/mob-portal
+/src/main/resources/db/migration/                    @meridiancare/mob-appeals @meridiancare/mob-gate

@@ -1,0 +1,45 @@
+diff --git a/pom.xml b/pom.xml
+index 85e023e..9f14ea1 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -12,7 +12,7 @@
+     <maven.compiler.release>17</maven.compiler.release>
+     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+     <!-- Bumped to 2.7 in the 2025-11 release. -->
+-    <clinical.rules.version>2.7.0</clinical.rules.version>
++    <clinical.rules.version>2.8.0</clinical.rules.version>
+   </properties>
+ 
+   <repositories>
+diff --git a/src/test/java/com/meridiancare/priorauth/service/ReasonTextContractTest.java b/src/test/java/com/meridiancare/priorauth/service/ReasonTextContractTest.java
+new file mode 100644
+index 0000000..d8937ca
+--- /dev/null
++++ b/src/test/java/com/meridiancare/priorauth/service/ReasonTextContractTest.java
+@@ -0,0 +1,26 @@
++package com.meridiancare.priorauth.service;
++
++import com.meridiancare.clinical.ClinicalCriteriaEvaluator;
++import com.meridiancare.clinical.CriteriaEvaluation;
++import com.meridiancare.clinical.CriteriaRepository;
++import org.junit.jupiter.api.Test;
++
++import java.util.Map;
++
++import static org.junit.jupiter.api.Assertions.assertTrue;
++
++/** Gate, UOW-47: denial reasons must be usable by a provider without a call. */
++class ReasonTextContractTest {
++
++    @Test
++    void denialReasonsAreSentencesNotCodes() {
++        ClinicalCriteriaEvaluator evaluator =
++                new ClinicalCriteriaEvaluator(new CriteriaRepository());
++        CriteriaEvaluation e = evaluator.evaluate("27447", Map.of(
++                "CONSERVATIVE_THERAPY", true, "IMAGING_PRIOR", false, "AGE_BAND", true,
++                "PROVIDER_ATTESTATION", true));
++
++        String first = evaluator.denialReasons(e).get(0);
++        assertTrue(first.contains(" "), "expected a sentence, got: " + first);
++    }
++}

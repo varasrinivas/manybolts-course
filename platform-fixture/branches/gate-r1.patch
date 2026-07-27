@@ -1,0 +1,23 @@
+diff --git a/src/main/java/com/meridiancare/priorauth/domain/AuthStatus.java b/src/main/java/com/meridiancare/priorauth/domain/AuthStatus.java
+index 914f196..1def883 100644
+--- a/src/main/java/com/meridiancare/priorauth/domain/AuthStatus.java
++++ b/src/main/java/com/meridiancare/priorauth/domain/AuthStatus.java
+@@ -9,6 +9,7 @@ package com.meridiancare.priorauth.domain;
+ public enum AuthStatus {
+     RECEIVED,
+     IN_REVIEW,
++    AUTO_APPROVED_CRITERIA,
+     AUTO_APPROVED,
+     APPROVED,
+     DENIED,
+diff --git a/src/main/resources/db/migration/V47__criteria_threshold.sql b/src/main/resources/db/migration/V47__criteria_threshold.sql
+new file mode 100644
+index 0000000..5d8a5b2
+--- /dev/null
++++ b/src/main/resources/db/migration/V47__criteria_threshold.sql
+@@ -0,0 +1,5 @@
++-- UOW-48  Gate: record which threshold produced the determination.
++ALTER TABLE determination ADD COLUMN threshold_used NUMERIC(4,3);
++ALTER TABLE determination ADD COLUMN threshold_source VARCHAR(32);
++
++UPDATE determination SET threshold_used = 0.85 WHERE threshold_used IS NULL;

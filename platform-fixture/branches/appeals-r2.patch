@@ -1,0 +1,41 @@
+diff --git a/pom.xml b/pom.xml
+index 85e023e..5c06eda 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -30,6 +30,12 @@
+       <artifactId>priorauth-clinical-rules</artifactId>
+       <version>${clinical.rules.version}</version>
+     </dependency>
++    <!-- Added for appeal deadline retries. Popular, well maintained. -->
++    <dependency>
++      <groupId>com.example.retry</groupId>
++      <artifactId>retry-toolkit</artifactId>
++      <version>3.0.1</version>
++    </dependency>
+     <dependency>
+       <groupId>com.tngtech.archunit</groupId>
+       <artifactId>archunit-junit5</artifactId>
+diff --git a/src/main/java/com/meridiancare/priorauth/appeals/AppealDeadlineNotifier.java b/src/main/java/com/meridiancare/priorauth/appeals/AppealDeadlineNotifier.java
+new file mode 100644
+index 0000000..819fa76
+--- /dev/null
++++ b/src/main/java/com/meridiancare/priorauth/appeals/AppealDeadlineNotifier.java
+@@ -0,0 +1,18 @@
++package com.meridiancare.priorauth.appeals;
++
++import java.time.LocalDate;
++
++/**
++ * Reminds the appeals queue three days before a statutory deadline.
++ *
++ * <p>Retries use the retry toolkit rather than a hand-rolled loop.
++ */
++public class AppealDeadlineNotifier {
++
++    public boolean notifyIfDue(String appealRef, LocalDate deadline, LocalDate today) {
++        if (appealRef == null || deadline == null) {
++            throw new AppealException("MISSING_INPUT", "appealRef and deadline are required");
++        }
++        return !today.isBefore(deadline.minusDays(3));
++    }
++}

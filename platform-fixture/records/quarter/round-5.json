@@ -1,0 +1,24 @@
+{
+  "round": 5,
+  "startedAt": "2026-07-27T03:54:00Z",
+  "start": {
+    "boltsLanded": 0,
+    "flags": 0,
+    "provenanceRecords": 8
+  },
+  "endedAt": "2026-07-27T03:55:15Z",
+  "counted": {
+    "boltsLanded": 0,
+    "flagsLive": 0,
+    "provenanceRecords": 8
+  },
+  "judged": {
+    "validatorQueueHours": null,
+    "contractBreakages": null,
+    "crossRepoBreakages": null,
+    "steeringDriftEvents": null,
+    "evidenceCompletenessPct": null,
+    "securityQueueDepth": null,
+    "note": "fill these in from your round notes before scoring"
+  }
+}

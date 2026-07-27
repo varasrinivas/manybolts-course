@@ -1,0 +1,5 @@
+# Ownership for priorauth-web.
+
+/src/portal/     @meridiancare/mob-portal
+/src/queue/      @meridiancare/mob-portal
+/tokens-java/    @meridiancare/mob-portal

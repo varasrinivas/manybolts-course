@@ -1,0 +1,37 @@
+#!/bin/sh
+# Maven wrapper.
+#
+# Resolves Maven from MAVEN_HOME, M2_HOME, your PATH, or a common install
+# location. If it cannot find one it says so instead of failing obscurely.
+set -e
+
+# Find Maven: MAVEN_HOME, M2_HOME, PATH, then the usual install locations.
+find_mvn() {
+  if [ -n "${MAVEN_HOME:-}" ] && [ -x "$MAVEN_HOME/bin/mvn" ]; then echo "$MAVEN_HOME/bin/mvn"; return 0; fi
+  if [ -n "${M2_HOME:-}" ] && [ -x "$M2_HOME/bin/mvn" ]; then echo "$M2_HOME/bin/mvn"; return 0; fi
+  if command -v mvn >/dev/null 2>&1; then command -v mvn; return 0; fi
+  for base in /c/Program\ Files/Maven /c/Program\ Files/apache-maven* /c/apache-maven*                   /c/tools/apache-maven* /d/softwares/apache-maven* /d/apache-maven*                   /opt/maven /usr/local/maven "$HOME/Downloads/apache-maven"* "$HOME/apache-maven"*; do
+    for cand in $base; do
+      [ -x "$cand/bin/mvn" ] && { echo "$cand/bin/mvn"; return 0; }
+    done
+  done
+  return 1
+}
+
+MVN="$(find_mvn || true)"
+if [ -n "$MVN" ]; then
+  exec "$MVN" "$@"
+fi
+
+cat >&2 <<'MSG'
+maven not found.
+
+  install it, or point the wrapper at an existing install:
+    export MAVEN_HOME=/path/to/apache-maven-3.9.x
+
+Without maven you can still:
+  - compile every repo:        ../../scripts/verify-fixture.sh
+  - run the flaking assertion: ../../scripts/flake-check.sh
+  - run the layer rule:        ../../scripts/arch-check.sh
+MSG
+exit 127

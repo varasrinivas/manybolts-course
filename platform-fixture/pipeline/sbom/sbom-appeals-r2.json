@@ -1,0 +1,44 @@
+{
+  "build": "appeals-r2",
+  "generated": "2026-02-04T10:12:00Z",
+  "components": [
+    {
+      "name": "com.meridiancare:priorauth-clinical-rules",
+      "version": "2.7.0",
+      "scope": "compile"
+    },
+    {
+      "name": "com.meridiancare:priorauth-web-tokens",
+      "version": "1.4.0",
+      "scope": "compile"
+    },
+    {
+      "name": "org.junit.jupiter:junit-jupiter",
+      "version": "5.10.2",
+      "scope": "test"
+    },
+    {
+      "name": "org.apache.commons:commons-lang3",
+      "version": "3.14.0",
+      "scope": "compile"
+    },
+    {
+      "name": "com.example.retry:retry-toolkit",
+      "version": "3.0.1",
+      "scope": "compile",
+      "declaredIn": "pom.xml"
+    },
+    {
+      "name": "org.apache.commons:commons-text",
+      "version": "1.9",
+      "scope": "compile",
+      "transitiveVia": "com.example.retry:retry-toolkit:3.0.1"
+    },
+    {
+      "name": "org.slf4j:slf4j-api",
+      "version": "2.0.13",
+      "scope": "compile",
+      "transitiveVia": "com.example.retry:retry-toolkit:3.0.1"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+suite,tests,minutes,notes
+unit,2841,6,fast
+integration,912,21,DeterminationServiceIT lives here
+web,104,4,
+contract,33,4,do not skip
+package,0,3,

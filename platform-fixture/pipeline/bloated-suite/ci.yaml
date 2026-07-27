@@ -1,0 +1,24 @@
+# Shared pipeline. One runner pool of six, used by every mob.
+name: verify
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: [self-hosted, pool-a]
+    steps:
+      - name: checkout
+        run: git checkout $GITHUB_SHA
+      - name: unit
+        run: ./mvnw -q test          # 6 min
+      - name: integration
+        run: ./mvnw -q verify -Pit   # 21 min
+      - name: web
+        run: npm test                # 4 min
+      - name: contract
+        run: ./mvnw -q verify -Pcontract   # 4 min  (never skip this one)
+      - name: package
+        run: ./mvnw -q package -DskipTests # 3 min
+
+# Measured: 34 min end to end, 3,890 tests.
+# Runner pool utilisation last week: 83%. Mean queue wait: 41 min.

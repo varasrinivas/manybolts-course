@@ -1,0 +1,52 @@
+diff --git a/src/main/java/com/meridiancare/priorauth/appeals/AppealController.java b/src/main/java/com/meridiancare/priorauth/appeals/AppealController.java
+new file mode 100644
+index 0000000..baf1146
+--- /dev/null
++++ b/src/main/java/com/meridiancare/priorauth/appeals/AppealController.java
+@@ -0,0 +1,22 @@
++package com.meridiancare.priorauth.appeals;
++
++import com.meridiancare.priorauth.annotation.PhiBoundary;
++import com.meridiancare.priorauth.domain.AuthStatus;
++
++/** POST /determinations/{id}/appeal */
++public class AppealController {
++
++    private final AppealReviewService reviewService;
++
++    public AppealController(AppealReviewService reviewService) {
++        this.reviewService = reviewService;
++    }
++
++    @PhiBoundary(reason = "appeal carries the member record")
++    public AuthStatus lodge(String requestId, String memberId) {
++        if (requestId == null || memberId == null) {
++            throw new AppealException("MISSING_INPUT", "requestId and memberId are required");
++        }
++        return AuthStatus.APPEALED;
++    }
++}
+diff --git a/src/main/java/com/meridiancare/priorauth/domain/AuthStatus.java b/src/main/java/com/meridiancare/priorauth/domain/AuthStatus.java
+index 914f196..3ce8d9f 100644
+--- a/src/main/java/com/meridiancare/priorauth/domain/AuthStatus.java
++++ b/src/main/java/com/meridiancare/priorauth/domain/AuthStatus.java
+@@ -9,6 +9,8 @@ package com.meridiancare.priorauth.domain;
+ public enum AuthStatus {
+     RECEIVED,
+     IN_REVIEW,
++    APPEALED,
++    APPEAL_UPHELD,
+     AUTO_APPROVED,
+     APPROVED,
+     DENIED,
+diff --git a/src/main/resources/db/migration/V47__add_appeal_states.sql b/src/main/resources/db/migration/V47__add_appeal_states.sql
+new file mode 100644
+index 0000000..6478320
+--- /dev/null
++++ b/src/main/resources/db/migration/V47__add_appeal_states.sql
+@@ -0,0 +1,5 @@
++-- UOW-41  Appeals: members can appeal a denied determination.
++ALTER TABLE determination ADD COLUMN appeal_ref VARCHAR(32);
++ALTER TABLE determination ADD COLUMN appealed_at TIMESTAMP;
++
++CREATE INDEX idx_determination_appeal ON determination (appeal_ref);

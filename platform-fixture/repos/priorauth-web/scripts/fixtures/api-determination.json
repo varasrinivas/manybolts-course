@@ -1,0 +1,9 @@
+{
+  "requestId": "AR-90210",
+  "status": "IN_REVIEW",
+  "reasons": [
+    "Recent imaging (within 90 days) supporting the diagnosis was not found."
+  ],
+  "decisionDeadline": "2026-02-11",
+  "criteriaSetVersion": "2026.1"
+}

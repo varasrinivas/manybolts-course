@@ -1,0 +1,20 @@
+diff --git a/src/main/java/com/meridiancare/priorauth/service/DeterminationService.java b/src/main/java/com/meridiancare/priorauth/service/DeterminationService.java
+index 70c16eb..94ad8a7 100644
+--- a/src/main/java/com/meridiancare/priorauth/service/DeterminationService.java
++++ b/src/main/java/com/meridiancare/priorauth/service/DeterminationService.java
+@@ -45,8 +45,13 @@ public class DeterminationService {
+         CriteriaEvaluation evaluation =
+                 evaluator.evaluate(request.getProcedureCode(), request.getClinicalFacts());
+ 
+-        AuthStatus status = evaluation.autoApprovable() ? AuthStatus.AUTO_APPROVED : AuthStatus.IN_REVIEW;
+-        List<String> reasons = evaluation.autoApprovable()
++        // UOW-49: read the threshold once here rather than calling back into the
++        // library for every branch. Behaviour is unchanged.
++        boolean aboveThreshold =
++                evaluation.confidence() >= com.meridiancare.clinical.Thresholds.AUTO_APPROVE_THRESHOLD;
++
++        AuthStatus status = aboveThreshold ? AuthStatus.AUTO_APPROVED : AuthStatus.IN_REVIEW;
++        List<String> reasons = aboveThreshold
+                 ? List.of()
+                 : evaluator.denialReasons(evaluation);
+ 

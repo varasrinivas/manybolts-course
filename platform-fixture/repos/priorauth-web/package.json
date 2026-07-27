@@ -1,0 +1,15 @@
+{
+  "name": "priorauth-web",
+  "version": "3.6.1",
+  "private": true,
+  "description": "Provider portal and nurse review queue",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/",
+    "start": "node scripts/serve.mjs"
+  },
+  "dependencies": {
+    "@meridiancare/clinical-rules": "file:vendor/clinical-rules-2.3.0"
+  }
+}
