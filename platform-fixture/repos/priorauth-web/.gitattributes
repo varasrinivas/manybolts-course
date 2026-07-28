@@ -1,0 +1,8 @@
+# LF in the repo and in the working tree, whatever core.autocrlf says locally.
+#
+# The lab scripts apply branches/*.patch to this tree with `git apply`, and a
+# CRLF checkout makes those patches fail. `reset-quarter.sh` resets --hard to
+# fixture-baseline, so this has to be committed at the baseline to survive.
+* text=auto eol=lf
+
+*.java diff=java
