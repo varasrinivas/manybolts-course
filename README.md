@@ -124,3 +124,7 @@ Writes `course/index.html.bak` before each change. Verified end to end on an emp
 Not module order: prototype → fixture → slots → Track 0 → Track 1 → **Track 3** → Track 2 → Track 4 → Track 5 → run The Quarter → MS1–MS3. Track 3 precedes Track 2 because M14's registry feeds the M06 and M09 labs; M17 follows M16 because it consumes the provenance chain.
 
 Roughly 31 sessions.
+
+## Licence
+
+Proprietary — copyright (c) 2026 Vara Srinivas, all rights reserved. Read it, study it, run the labs yourself. Redistributing it, adapting it, or teaching from it needs written permission. See [LICENSE](LICENSE).
