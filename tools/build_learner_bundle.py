@@ -41,6 +41,10 @@ EXCLUDED_DIRS = {
 }
 EXCLUDED_SUFFIXES = {".bak", ".pyc"}
 
+# Mirrors .gitattributes: LF everywhere, CRLF for what cmd.exe runs, jars untouched.
+BINARY_SUFFIXES = {".jar"}
+CRLF_SUFFIXES = {".cmd", ".bat"}
+
 # Learner-facing text points at .solutions/ (M00, M21, break-round4.sh) but the kit
 # README calls it "exclude from the learner bundle". Excluded by default; the flag
 # exists because that contradiction is the author's to settle, not this script's.
@@ -106,6 +110,24 @@ adapting it, or teaching from it needs written permission.
 """
 
 
+def copy_file(src: Path, dst: Path) -> None:
+    """
+    Copy, normalising line endings to match .gitattributes.
+
+    The kit's working tree is mixed — git normalises on commit, so nobody
+    notices. The zip has no git to normalise it, and a CRLF source tree with LF
+    patches is precisely the `git apply` failure the attributes exist to stop.
+    """
+    if src.suffix in BINARY_SUFFIXES:
+        shutil.copy2(src, dst)
+        return
+    body = src.read_bytes().replace(b"\r\n", b"\n")
+    if src.suffix in CRLF_SUFFIXES:
+        body = body.replace(b"\n", b"\r\n")
+    dst.write_bytes(body)
+    shutil.copystat(src, dst)
+
+
 def copy_tree(src: Path, dst: Path, keep_solutions: bool) -> int:
     """Copy src into dst, pruning EXCLUDED_*. Returns files written."""
     n = 0
@@ -121,7 +143,7 @@ def copy_tree(src: Path, dst: Path, keep_solutions: bool) -> int:
             continue
         target = dst / rel
         target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(path, target)
+        copy_file(path, target)
         n += 1
     return n
 
@@ -166,6 +188,17 @@ def verify(out: Path, keep_solutions: bool) -> list[str]:
         if not any(p.startswith(f"platform-fixture/repos/{repo}/.git/") for p in present):
             continue
         problems.append(f"{repo}/.git copied — the bundle must ship inert")
+
+    # The zip ships without git to normalise it, so check the bytes we actually wrote.
+    for rel in sorted(present):
+        path, suffix = out / rel, Path(rel).suffix
+        if suffix in BINARY_SUFFIXES:
+            continue
+        crlf = b"\r\n" in path.read_bytes()
+        if crlf and suffix not in CRLF_SUFFIXES:
+            problems.append(f"CRLF in a file that must be LF: {rel}")
+        elif not crlf and suffix in CRLF_SUFFIXES:
+            problems.append(f"LF in a file cmd.exe runs: {rel}")
 
     return problems
 
@@ -212,7 +245,7 @@ def main() -> int:
     n = 0
     for rel in FILES:
         (out / rel).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(rel, out / rel)
+        copy_file(rel, out / rel)
         n += 1
     n += copy_tree(FIXTURE, out / FIXTURE, keep_solutions)
     (out / "README.md").write_text(STUDENT_README, encoding="utf-8", newline="\n")
