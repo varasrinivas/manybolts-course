@@ -25,6 +25,7 @@ tools/
   validate.py                   structural gates
   validate-manybolts.ps1        content rules 1-8 (reads UTF-8)
   sync_glossary.py              inline glossary.md into the player; --check for drift
+  build_learner_bundle.py       emit the student tree; the kit itself never ships
 .claude/commands/
   prototype-gate  build-fixture  build-quarter  tier-repo
   plan-module  build-module  build-lab  validate-module
@@ -124,6 +125,20 @@ Writes `course/index.html.bak` before each change. Verified end to end on an emp
 Not module order: prototype → fixture → slots → Track 0 → Track 1 → **Track 3** → Track 2 → Track 4 → Track 5 → run The Quarter → MS1–MS3. Track 3 precedes Track 2 because M14's registry feeds the M06 and M09 labs; M17 follows M16 because it consumes the provenance chain.
 
 Roughly 31 sessions.
+
+## Shipping to students
+
+This repository is the authoring kit and is not what a learner receives. The bundle is generated, so the two cannot drift:
+
+```bash
+python3 tools/build_learner_bundle.py --zip        # dist/manybolts-course-labs[.zip]
+```
+
+It carries `course/index.html`, the fixture, `LICENSE`, `.gitattributes` and a student README. It leaves behind the blueprint, module specs, `staged/`, `tools/`, `PROGRESS.md`, `CLAUDE.md` — and `platform-fixture/records/`, which holds worked answers: the audit reply, the postmortem, the scored retro. The build fails rather than emits if any of those appear.
+
+`.solutions/` is excluded by default. That is a judgement call, not a settled fact — M00, M21 and `break-round4.sh` all point learners at it, while the layout note above calls it "exclude from the learner bundle". Pass `--solutions include` if the intent is a deferred key the learner holds and opens when the module says so.
+
+Students need neither GitHub nor a network: nothing in the course pushes, fetches or clones, and `setup.sh` initialises the three repos locally.
 
 ## Licence
 

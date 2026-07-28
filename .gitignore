@@ -8,3 +8,6 @@ __pycache__/
 # os cruft
 .DS_Store
 Thumbs.db
+
+# generated learner bundle
+dist/
